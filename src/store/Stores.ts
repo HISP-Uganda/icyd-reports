@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import { combine, createApi } from "effector";
 import { Dictionary, every } from "lodash";
 import { Column, Option, Store } from "../interfaces";
-import { columns, columns2, columns3, columns4 } from "./Constants";
+import { columns, columns2, columns3 } from "./Constants";
 import { domain } from "./Domains";
 import {
     addRemoveColumn,
@@ -176,6 +176,10 @@ export const $elements = $store.map((state) => {
 
 export const $selectedProgram = domain.createStore<string>("");
 export const $selectedStage = domain.createStore<string>("");
+export const $dateRange = domain.createStore<[string, string]>([
+    dayjs().format("YYYY-MM-DD"),
+    dayjs().subtract(30, "days").format("YYYY-MM-DD"),
+]);
 
 export const selectedProgramApi = createApi($selectedProgram, {
     set: (_, program: string) => program,
@@ -297,4 +301,8 @@ export const $withOptions = domain.createStore<Dictionary<Dictionary<string>>>(
 
 export const withOptionsApi = createApi($withOptions, {
     set: (_, value: Dictionary<Dictionary<string>>) => value,
+});
+
+export const dateRangeApi = createApi($dateRange, {
+    change: (_, value: [string, string]) => value,
 });

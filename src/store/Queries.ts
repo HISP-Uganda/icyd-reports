@@ -1,8 +1,5 @@
-import { Column, DistrictOption } from "./../interfaces";
 import { useDataEngine } from "@dhis2/app-runtime";
-import quarterOfYear from "dayjs/plugin/quarterOfYear";
-import dayjs, { Dayjs } from "dayjs";
-
+import axios from "axios";
 import {
     differenceInMonths,
     differenceInYears,
@@ -10,6 +7,8 @@ import {
     isWithinInterval,
     parseISO,
 } from "date-fns";
+import dayjs, { Dayjs } from "dayjs";
+import quarterOfYear from "dayjs/plugin/quarterOfYear";
 import {
     every,
     fromPairs,
@@ -23,20 +22,12 @@ import {
     uniq,
 } from "lodash";
 import moment from "moment";
-import axios from "axios";
 import { useQuery } from "react-query";
-const kampalaDivisions = [
-    { label: "CENTRAL", value: "QT7n2EnRLbh" },
-    { label: "KAWEMPE", value: "y1j39xhbozk" },
-    { label: "MAKINDYE", value: "eoEtIOqm90L" },
-    { label: "NAKAWA", value: "I6oe4U5UT5d" },
-    { label: "RUBAGA", value: "CSJ23GHbZAo" },
-];
+import { Option } from "../interfaces";
+import { DistrictOption } from "./../interfaces";
+import { districts, indicatorReportColumns } from "./Constants";
 import {
     changeTotal,
-    setColumn4,
-    setCurrentProgram,
-    setCurrentStage,
     setDistricts,
     setPrograms,
     setSelectedOrgUnits,
@@ -44,16 +35,16 @@ import {
     setSubCounties,
     setUserOrgUnits,
 } from "./Events";
-import {
-    calculateQuarter,
-    findQuarters,
-    indicatorReportQueries,
-    ovcTrackerIndicators,
-    ovcTrackerPreventionIndicators,
-} from "./utils";
-import { Option } from "../interfaces";
-import { districts, indicatorReportColumns } from "./Constants";
 import { selectedProgramApi, selectedStageApi, withOptionsApi } from "./Stores";
+import { calculateQuarter, findQuarters, ovcTrackerIndicators } from "./utils";
+
+const kampalaDivisions = [
+    { label: "CENTRAL", value: "QT7n2EnRLbh" },
+    { label: "KAWEMPE", value: "y1j39xhbozk" },
+    { label: "MAKINDYE", value: "eoEtIOqm90L" },
+    { label: "NAKAWA", value: "I6oe4U5UT5d" },
+    { label: "RUBAGA", value: "CSJ23GHbZAo" },
+];
 
 dayjs.extend(quarterOfYear);
 
@@ -64,6 +55,11 @@ const computePercentage = (numerator: number, denominator: number) => {
     return 0;
 };
 
+export const URL =
+    process.env.NODE_ENV === "development"
+        ? "http://localhost:3001"
+        : "https://ovcdhis2.idi.co.ug/layering";
+
 const risks: { [key: string]: string } = {
     "Child of Non suppressed HIV+ Caregiver": "Child of HIV+ Caregiver",
     "Child of suppressed HIV+ Caregiver": "Child of HIV+ Caregiver",
@@ -72,8 +68,7 @@ const risks: { [key: string]: string } = {
 };
 
 export const api = axios.create({
-    baseURL: "https://data.icyd.hispuganda.org/api/wal/",
-    // baseURL: "http://localhost:3001/api/wal/",
+    baseURL: URL,
 });
 
 const prevConditions = [
@@ -3214,9 +3209,7 @@ export const useLayeringVSLA = (
                     data: { columns, rows, cursor },
                 } = await api.post("sql", {
                     ...query,
-                    query: `select ${dataElementColumns.join(
-                        ","
-                    )} from ${String(stage).toLowerCase()}`,
+                    query: `select * from ${String(stage).toLowerCase()}`,
                 });
 
                 if (columns) {
@@ -3233,9 +3226,7 @@ export const useLayeringVSLA = (
                 );
 
                 const query2 = {
-                    query: `select ${attributeColumns.join(",")} from ${String(
-                        program
-                    ).toLowerCase()}`,
+                    query: `select * from ${String(program).toLowerCase()}`,
                     filter: {
                         terms: {
                             [`trackedEntityInstance.keyword`]: instances,

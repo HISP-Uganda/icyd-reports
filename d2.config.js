@@ -1,9 +1,12 @@
 const config = {
-    type: 'app',
+    type: "app",
+    name: "ovc-dhis2-reports",
+    title: "OVC DHIS2 Reports",
+    description: "",
 
     entryPoints: {
-        app: './src/AppWrapper.js',
+        app: "./src/AppWrapper.js",
     },
-}
+};
 
-module.exports = config
+module.exports = config;

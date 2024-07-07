@@ -24,6 +24,7 @@ import {
     $selectedStage,
     $store,
     $withOptions,
+    $dateRange,
 } from "../store/Stores";
 import { innerColumns, otherRows } from "../store/utils";
 const pageSize = 25;
@@ -33,6 +34,7 @@ const VSLALineListTable = () => {
     const selectedStage = useStore($selectedStage);
     const withOptions = useStore($withOptions);
     const columns4 = useStore($columns4);
+    const dateRange = useStore($dateRange);
     const [query, setQuery] = useState<{ [key: string]: any }>({
         fetch_size: pageSize,
         field_multi_value_leniency: true,
@@ -88,8 +90,8 @@ const VSLALineListTable = () => {
                     {
                         range: {
                             eventDate: {
-                                gte: "2022-07-01",
-                                lte: "2023-06-30",
+                                gte: dateRange[0],
+                                lte: dateRange[1],
                             },
                         },
                     },
@@ -164,12 +166,20 @@ const VSLALineListTable = () => {
                                     deleted: false,
                                 },
                             },
+                            // {
+                            //     range: {
+                            //         eventDate: {
+                            //             gte: dateRange[0],
+                            //             lte: dateRange[1],
+                            //         },
+                            //     },
+                            // },
                         ],
                     },
                 },
             };
         });
-    }, [store.selectedOrgUnits]);
+    }, [store.selectedOrgUnits, ...dateRange]);
     return (
         <Stack>
             <Box m="auto" w="100%">

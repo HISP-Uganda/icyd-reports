@@ -17,12 +17,15 @@ import {
     Text,
     useDisclosure,
 } from "@chakra-ui/react";
+
 import { useDataEngine } from "@dhis2/app-runtime";
-import { TreeSelect } from "antd";
+import { TreeSelect, DatePicker, DatePickerProps } from "antd";
+import { RangePickerProps } from "antd/es/date-picker";
 import { GroupBase, Select } from "chakra-react-select";
+import dayjs from "dayjs";
 import { useStore } from "effector-react";
 import { saveAs } from "file-saver";
-import { flatten, fromPairs, uniq, uniqBy } from "lodash";
+import { flatten, fromPairs, isArray, uniq, uniqBy } from "lodash";
 import { ChangeEvent, useEffect, useRef } from "react";
 import { MdFileDownload, MdFilterList } from "react-icons/md";
 import XLSX from "xlsx";
@@ -41,8 +44,6 @@ import {
     $elements,
     $isChecked,
     $programs,
-    $selectedAttributes,
-    $selectedDataElements,
     $selectedProgram,
     $selectedStage,
     $stages,
@@ -50,6 +51,8 @@ import {
     $withOptions,
     selectedProgramApi,
     selectedStageApi,
+    $dateRange,
+    dateRangeApi,
 } from "../../store/Stores";
 
 function s2ab(s: any) {
@@ -74,6 +77,8 @@ const createQuery = (parent: any) => {
     };
 };
 
+const { RangePicker } = DatePicker;
+
 const VSLALineFilter = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
@@ -92,6 +97,7 @@ const VSLALineFilter = () => {
     const columns4 = useStore($columns4);
     const withOptions = useStore($withOptions);
     const attributes = useStore($attributes);
+    const dateRange = useStore($dateRange);
 
     const elements = useStore($elements);
     const allColumns = fromPairs(
@@ -177,8 +183,8 @@ const VSLALineFilter = () => {
             {
                 range: {
                     eventDate: {
-                        gte: "2022-07-01",
-                        lte: "2023-06-30",
+                        gte: dateRange[0],
+                        lte: dateRange[1],
                     },
                 },
             },
@@ -186,10 +192,8 @@ const VSLALineFilter = () => {
         let {
             data: { rows: allRows, columns, cursor: currentCursor },
         } = await api.post("sql", {
-            query: `select ${elements.join(
-                ","
-            )} from ${selectedStage.toLowerCase()}`,
-            fetch_size: 500,
+            query: `select * from ${selectedStage.toLowerCase()}`,
+            fetch_size: 100,
             field_multi_value_leniency: true,
             filter: {
                 bool: {
@@ -207,9 +211,7 @@ const VSLALineFilter = () => {
             availableRows.map((d: any) => d.trackedEntityInstance)
         );
         const query2 = {
-            query: `select ${attributes.join(
-                ","
-            )} from ${selectedProgram.toLowerCase()}`,
+            query: `select * from ${selectedProgram.toLowerCase()}`,
             filter: {
                 terms: {
                     [`trackedEntityInstance.keyword`]: instances,
@@ -256,9 +258,7 @@ const VSLALineFilter = () => {
                     currentRows.map((d: any) => d.trackedEntityInstance)
                 );
                 const query2 = {
-                    query: `select  ${attributes.join(
-                        ","
-                    )} from ${selectedProgram.toLowerCase()}`,
+                    query: `select * from ${selectedProgram.toLowerCase()}`,
                     filter: {
                         terms: {
                             [`trackedEntityInstance.keyword`]: instances,
@@ -449,6 +449,15 @@ const VSLALineFilter = () => {
         setColumn4(findColumns());
     }, [selectedStage]);
 
+    const onChange = (
+        _: DatePickerProps["value"] | RangePickerProps["value"],
+        stringValues: [string, string] | string
+    ) => {
+        if (isArray(stringValues)) {
+            dateRangeApi.change(stringValues);
+        }
+    };
+
     return (
         <Stack direction="row" spacing="30px" alignItems="center" w="100%">
             <Stack direction="row" flex={1} alignItems="center">
@@ -500,6 +509,11 @@ const VSLALineFilter = () => {
                     treeData={store.userOrgUnits}
                 />
             </Stack>
+            <RangePicker
+                format="YYYY-MM-DD"
+                onChange={onChange}
+                value={[dayjs(dateRange[0]), dayjs(dateRange[1])]}
+            />
             <Stack
                 direction="row"
                 spacing={4}

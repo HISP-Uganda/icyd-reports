@@ -22,11 +22,9 @@ import {
 import { useDataEngine } from "@dhis2/app-runtime";
 import { DatePicker, Input, TreeSelect } from "antd";
 import { useStore } from "effector-react";
-import { saveAs } from "file-saver";
-import { flatten, fromPairs } from "lodash";
+import { flatten } from "lodash";
 import { ChangeEvent, useRef, useState } from "react";
 import { MdFileDownload, MdFilterList } from "react-icons/md";
-import XLSX from "xlsx";
 import {
     addRemoveColumn,
     changeCode,
@@ -35,9 +33,8 @@ import {
     setUserOrgUnits,
     toggleColumns,
 } from "../../store/Events";
-import { api } from "../../store/Queries";
-import { $columns, $isChecked, $store } from "../../store/Stores";
-import { s2ab } from "../../store/utils";
+import { api, URL } from "../../store/Queries";
+import { $isChecked, $store } from "../../store/Stores";
 
 const createQuery = (parent: any) => {
     return {
@@ -64,7 +61,6 @@ const DataSetLayerFilter = () => {
     const store = useStore($store);
     const btnRef = useRef<any>();
     const engine = useDataEngine();
-    const filteredColumns = useStore($columns);
     const isChecked = useStore($isChecked);
     const loadOrganisationUnitsChildren = async (parent: any) => {
         try {
@@ -100,110 +96,20 @@ const DataSetLayerFilter = () => {
     };
 
     const download = async () => {
-        let must: any[] = [
-            {
-                term: {
-                    ["qtr.keyword"]: store.period.format("YYYY[Q]Q"),
-                },
-            },
-            {
-                term: {
-                    inactive: false,
-                },
-            },
-            {
-                term: {
-                    deleted: false,
-                },
-            },
-            {
-                bool: {
-                    should: [
-                        {
-                            terms: {
-                                ["level1.keyword"]: store.selectedOrgUnits,
-                            },
-                        },
-                        {
-                            terms: {
-                                ["level2.keyword"]: store.selectedOrgUnits,
-                            },
-                        },
-                        {
-                            terms: {
-                                ["level3.keyword"]: store.selectedOrgUnits,
-                            },
-                        },
-                        {
-                            terms: {
-                                ["level4.keyword"]: store.selectedOrgUnits,
-                            },
-                        },
-                        {
-                            terms: {
-                                ["level5.keyword"]: store.selectedOrgUnits,
-                            },
-                        },
-                    ],
-                },
-            },
-        ];
-        if (store.code) {
-            must = [
-                ...must,
-                {
-                    match: {
-                        ["HLKc2AKR9jW.keyword"]: store.code,
-                    },
-                },
-            ];
-        }
-        let {
-            data: { rows: allRows, columns, cursor: currentCursor },
-        } = await api.post("sql", {
-            query: `select ${filteredColumns
-                .map((c) => c.id)
-                .join(", ")} from layering`,
-            filter: {
-                bool: {
-                    must,
-                },
+        await api.get("download", {
+            params: {
+                code: store.code,
+                selectedOrgUnits: store.selectedOrgUnits.join(","),
+                period: store.period.format("YYYY[Q]Q"),
             },
         });
 
-        const processedColumns = fromPairs(
-            filteredColumns.map((c) => [c.id, c.display])
-        );
-        if (currentCursor) {
-            do {
-                let {
-                    data: { rows, cursor },
-                } = await api.post("sql", { cursor: currentCursor });
-                allRows = allRows.concat(rows);
-                currentCursor = cursor;
-            } while (!!currentCursor);
-        }
-
-        let wb = XLSX.utils.book_new();
-        wb.Props = {
-            Title: "SheetJS Tutorial",
-            Subject: "Test",
-            Author: "Red Stapler",
-            CreatedDate: new Date(),
-        };
-
-        wb.SheetNames.push("Listing");
-        let ws = XLSX.utils.aoa_to_sheet([
-            columns.map((c: any) => processedColumns[c.name] || c.name),
-            ...allRows,
-        ]);
-        wb.Sheets["Listing"] = ws;
-
-        const wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
-        saveAs(
-            new Blob([s2ab(wbout)], { type: "application/octet-stream" }),
-            "export.xlsx"
-        );
+        const tempLink = document.createElement("a");
+        tempLink.href = `${URL}/static/layering.xlsx`;
+        tempLink.setAttribute("download", `layering.xlsx`);
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
         modalOnClose();
     };
 

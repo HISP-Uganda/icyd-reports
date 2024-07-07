@@ -204,7 +204,9 @@ const DataSetLayerTable = () => {
                                                     {...innerColumns(index)}
                                                     key={`${index}${record.id}${column.id}`}
                                                 >
-                                                    {String(record[column.id])}
+                                                    {String(
+                                                        record[column.id] ?? ""
+                                                    )}
                                                 </Td>
                                             ))}
                                     </Tr>

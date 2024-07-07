@@ -5,24 +5,24 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 
 let sessionCookie = "";
 const onProxyReq = (proxyReq) => {
-  if (sessionCookie) {
-    proxyReq.setHeader("cookie", sessionCookie);
-  }
+    if (sessionCookie) {
+        proxyReq.setHeader("cookie", sessionCookie);
+    }
 };
 const onProxyRes = (proxyRes) => {
-  const proxyCookie = proxyRes.headers["set-cookie"];
-  if (proxyCookie) {
-    sessionCookie = proxyCookie;
-  }
+    const proxyCookie = proxyRes.headers["set-cookie"];
+    if (proxyCookie) {
+        sessionCookie = proxyCookie;
+    }
 };
 // proxy middleware options
 const options = {
-  target: "https://uganda-icyd.edc.org", // target host
-  onProxyReq,
-  onProxyRes,
-  changeOrigin: true, // needed for virtual hosted sites
-  auth: undefined,
-  logLevel: "info",
+    target: "https://ovcdhis2.idi.co.ug", // target host
+    onProxyReq,
+    onProxyRes,
+    changeOrigin: true, // needed for virtual hosted sites
+    auth: undefined,
+    logLevel: "info",
 };
 
 // create the proxy (without context)
