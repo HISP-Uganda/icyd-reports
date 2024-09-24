@@ -74,6 +74,16 @@ export const columns: Column[] = [
     { selected: true, display: "Reasons for Exit", id: "reasonForExit" },
     {
         selected: true,
+        display: "District Relocated to",
+        id: "districtOfRelocation",
+    },
+    {
+        selected: true,
+        display: "Sub County Relocated to",
+        id: "subCountyOfRelocation",
+    },
+    {
+        selected: true,
         display: "Currently Enrolled in School (Y/N) (Home visit)",
         id: "enrolledInSchool",
     },
@@ -81,10 +91,13 @@ export const columns: Column[] = [
     { selected: true, display: "HIV_Status(+, /,?,  //+)", id: "hivStatus" },
     { selected: true, display: "OVC_TST ASSESS", id: "OVC_TST_ASSESS" },
     // TODO get guidance from Julius
+    // Look for HIV Risk screening question and if any of the questions has a yes from HIV/TB Risk assessment for both TB and HIV
     { selected: true, display: "OVC_TST RISK", id: "isAtRisk" },
     { selected: true, display: "OVC_TST REFER", id: "OVC_TST_REFER" },
     { selected: true, display: "OVC_TST REPORT", id: "OVC_TST_REPORT" },
     // TODO if status is DK and not at risk
+
+    // Look for HIV Risk screening question and all are no  the questions has a yes from HIV/TB Risk HIV
     {
         selected: true,
         display: "HIV test not required based on  HIV risk Assessment",
@@ -205,14 +218,14 @@ export const columns: Column[] = [
         display: "Due date for HIV rapid Test",
         id: "hivTestDueDate",
     },
-    {
-        selected: true,
-        display: "Date when HIV rapid test was done",
-        id: "dateHivTestDone",
-    },
+    // {
+    //     selected: true,
+    //     display: "Date when HIV rapid test was done",
+    //     id: "dateHivTestDone",
+    // },
     { selected: true, display: "HIV test result", id: "hivTestResults" },
     { selected: true, display: "Final Outcome", id: "finalOutcome" },
-    { selected: true, display: "PCR Test", id: "pcr" },
+    // { selected: true, display: "PCR Test", id: "pcr" },
     {
         selected: true,
         display: "Missed Appointment Date",
@@ -573,7 +586,12 @@ export const columns: Column[] = [
         id: "paraSocialWorker",
     },
     {
-        display: "Lasted Generated",
+        display: "Data Entrant",
+        id: "dataEntrant",
+        selected: true,
+    },
+    {
+        display: "Last Generated",
         id: "generated",
         selected: true,
     },
@@ -1508,13 +1526,8 @@ const findColor = (value: number) => {
 };
 
 export const columns3: Column[] = [
-    // {
-    //   id: "event",
-    //   display: "Event",
-    //   selected: true,
-    // },
     {
-        id: "ypDUCAS6juy",
+        id: "X4pNSt9UzOw",
         display: "Beneficiary ID",
         selected: true,
     },
@@ -1544,18 +1557,28 @@ export const columns3: Column[] = [
         selected: true,
     },
     {
-        id: "vfHaBC1ONln",
+        id: "huFucxA3e5c",
         display: "Beneficiary Name",
         selected: true,
     },
     {
-        id: "ZUKC6mck81A",
+        id: "CfpoFtRmK1z",
         display: "Sex",
         selected: true,
     },
     {
-        id: "eXWM3v3oIKu",
+        id: "N1nMqKtYKvI",
+        display: "DOB",
+        selected: true,
+    },
+    {
+        id: "age",
         display: "Age",
+        selected: true,
+    },
+    {
+        id: "ageGroup",
+        display: "Age Group",
         selected: true,
     },
     {
@@ -1569,7 +1592,7 @@ export const columns3: Column[] = [
         selected: true,
     },
     {
-        id: "parish",
+        id: "orgUnitName",
         display: "Parish",
         selected: true,
     },
@@ -1650,13 +1673,13 @@ export const columns3: Column[] = [
     },
 
     {
-        id: "SINOVUYO",
+        id: "GAT. SINOVUYO Sessions",
         selected: true,
         bg: "pink",
         display: "SINOVUYO sessions attended",
     },
     {
-        id: "Completed SINOVUYO",
+        id: "Completed GAT. SINOVUYO Sessions",
         selected: true,
         bg: "pink",
         display: "Completed SINOVUYO",
@@ -1727,13 +1750,13 @@ export const columns3: Column[] = [
     },
 
     {
-        id: "ECD",
+        id: "GAT. Early Childhood Development Sessions",
         selected: true,
         bg: "pink",
         display: "ECD sessions attended",
     },
     {
-        id: "Completed ECD",
+        id: "Completed GAT. Early Childhood Development Sessions",
         selected: true,
         bg: "pink",
         display: "Completed ECD",
@@ -1758,13 +1781,13 @@ export const columns3: Column[] = [
     },
 
     {
-        id: "Saving and Borrowing",
+        id: "GAT. VSLA Saving and Borrowing",
         selected: true,
         bg: "pink",
         display: "Saving and Borrowing sessions attended",
     },
     {
-        id: "Completed Saving and Borrowing",
+        id: "Completed GAT. VSLA Saving and Borrowing",
         selected: true,
         bg: "pink",
         display: "Completed Saving and Borrowing",
@@ -1816,13 +1839,13 @@ export const columns3: Column[] = [
     },
 
     {
-        id: "VSLA Methodology",
+        id: "GAT. Group VSLA methodology sessions",
         selected: true,
         bg: "pink",
         display: "VSLA Methodology sessions attended",
     },
     {
-        id: "Completed VSLA Methodology",
+        id: "Completed GAT. Group VSLA methodology sessions",
         selected: true,
         bg: "pink",
         display: "Completed VSLA Methodology",
@@ -1880,13 +1903,13 @@ export const columns3: Column[] = [
     //   display: "Module1: Saving",
     // },
     {
-        id: "Financial Literacy",
+        id: "GAT. Financial Literacy Sessions",
         selected: true,
         bg: "pink",
         display: "Financial Literacy sessions attended",
     },
     {
-        id: "Completed Financial Literacy",
+        id: "Completed GAT. Financial Literacy Sessions",
         selected: true,
         bg: "pink",
         display: "Completed Financial Literacy",
@@ -1950,13 +1973,13 @@ export const columns3: Column[] = [
     },
 
     {
-        id: "SPM Training",
+        id: "GAT. SPM Training Sessions",
         selected: true,
         bg: "pink",
         display: "SPM Training sessions attended",
     },
     {
-        id: "Completed SPM Training",
+        id: "Completed GAT. SPM Training Sessions",
         selected: true,
         bg: "pink",
         display: "Completed SPM Training",
@@ -1967,7 +1990,7 @@ const createColumns = (
     keyStart: number,
     year: number,
     accessor: string,
-    data: { [key: string]: any }
+    data: { [key: string]: any },
 ) => {
     return range(15).map((v, index) => {
         let quarter = "";
@@ -2017,7 +2040,7 @@ const createRow = (
     }[],
     year: number,
     data: { [key: string]: any },
-    accessor: string
+    accessor: string,
 ) => {
     return {
         key,
@@ -2039,7 +2062,7 @@ const createRow = (
 
 export const indicatorReportColumns = (
     period: any,
-    data: { [key: string]: any }
+    data: { [key: string]: any },
 ) => {
     const year = period.year();
     const rows = [
@@ -2062,49 +2085,49 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "G06XnwYXVPuF"
+            "G06XnwYXVPuF",
         ),
         createRow(
             "2",
             [{ key: "1", label: "M", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "G06XnwYXVPuM"
+            "G06XnwYXVPuM",
         ),
         createRow(
             "3",
             [{ key: "1", label: "T(COMP+PREV)", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "G06XnwYXVPu"
+            "G06XnwYXVPu",
         ),
         createRow(
             "4",
             [{ key: "1", label: "COMP", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "G06XnwYXVPu.EVrTtYEJfeN"
+            "G06XnwYXVPu.EVrTtYEJfeN",
         ),
         createRow(
             "5",
             [{ key: "1", label: "PREV(Community)", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "G06XnwYXVPu.uBYxpV8iADb"
+            "G06XnwYXVPu.uBYxpV8iADb",
         ),
         createRow(
             "6",
             [{ key: "1", label: "PREV(In school)", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "G06XnwYXVPu.h4tlGMjEc0Y"
+            "G06XnwYXVPu.h4tlGMjEc0Y",
         ),
         createRow(
             "621",
             [{ key: "1", label: "PREV(ARPA)", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "G06XnwYXVPu.h4tlGMjEc4Y"
+            "G06XnwYXVPu.h4tlGMjEc4Y",
         ),
         createRow(
             "7",
@@ -2125,7 +2148,7 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "SUBPOP"
+            "SUBPOP",
         ),
         createRow(
             "8",
@@ -2146,7 +2169,7 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "lnRPzUJNYQN"
+            "lnRPzUJNYQN",
         ),
         createRow(
             "9",
@@ -2167,7 +2190,7 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "SvwnCeMVs2x"
+            "SvwnCeMVs2x",
         ),
         createRow(
             "10",
@@ -2188,7 +2211,7 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "xjo40XN55fN"
+            "xjo40XN55fN",
         ),
         createRow(
             "11",
@@ -2209,21 +2232,21 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "funl4ILuJBgF"
+            "funl4ILuJBgF",
         ),
         createRow(
             "12",
             [{ key: "1", label: "M", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "funl4ILuJBgM"
+            "funl4ILuJBgM",
         ),
         createRow(
             "13",
             [{ key: "1", label: "T", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "funl4ILuJBg"
+            "funl4ILuJBg",
         ),
 
         createRow(
@@ -2245,21 +2268,21 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "heiF"
+            "heiF",
         ),
         createRow(
             "121",
             [{ key: "1", label: "M", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "heiM"
+            "heiM",
         ),
         createRow(
             "132",
             [{ key: "1", label: "T", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "hei"
+            "hei",
         ),
 
         createRow(
@@ -2281,21 +2304,21 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "ke1VrRuiMARF"
+            "ke1VrRuiMARF",
         ),
         createRow(
             "15",
             [{ key: "1", label: "M", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "ke1VrRuiMARM"
+            "ke1VrRuiMARM",
         ),
         createRow(
             "16",
             [{ key: "1", label: "T", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "ke1VrRuiMAR"
+            "ke1VrRuiMAR",
         ),
 
         createRow(
@@ -2317,21 +2340,21 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "zu7vuVccd5aF"
+            "zu7vuVccd5aF",
         ),
         createRow(
             "18",
             [{ key: "1", label: "M", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "zu7vuVccd5aM"
+            "zu7vuVccd5aM",
         ),
         createRow(
             "19",
             [{ key: "1", label: "T", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "zu7vuVccd5a"
+            "zu7vuVccd5a",
         ),
 
         createRow(
@@ -2353,21 +2376,21 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "bvDkc94MhA3F"
+            "bvDkc94MhA3F",
         ),
         createRow(
             "21",
             [{ key: "1", label: "M", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "bvDkc94MhA3M"
+            "bvDkc94MhA3M",
         ),
         createRow(
             "22",
             [{ key: "1", label: "T", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "bvDkc94MhA3"
+            "bvDkc94MhA3",
         ),
 
         createRow(
@@ -2389,21 +2412,21 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "DVgzq5RZugIF"
+            "DVgzq5RZugIF",
         ),
         createRow(
             "24",
             [{ key: "1", label: "M", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "DVgzq5RZugIM"
+            "DVgzq5RZugIM",
         ),
         createRow(
             "25",
             [{ key: "1", label: "T", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "DVgzq5RZugI"
+            "DVgzq5RZugI",
         ),
 
         createRow(
@@ -2415,7 +2438,7 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "A4D8wgVl21q"
+            "A4D8wgVl21q",
         ),
         createRow(
             "27",
@@ -2426,7 +2449,7 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "RvF3up57r29"
+            "RvF3up57r29",
         ),
 
         createRow(
@@ -2448,21 +2471,21 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "A4VQnLrL5OEF"
+            "A4VQnLrL5OEF",
         ),
         createRow(
             "29",
             [{ key: "1", label: "M", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "A4VQnLrL5OEM"
+            "A4VQnLrL5OEM",
         ),
         createRow(
             "30",
             [{ key: "1", label: "T", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "A4VQnLrL5OE"
+            "A4VQnLrL5OE",
         ),
 
         createRow(
@@ -2474,7 +2497,7 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "FR7RCoLtgHT"
+            "FR7RCoLtgHT",
         ),
         createRow(
             "32",
@@ -2485,7 +2508,7 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "xGHjuYfbx31"
+            "xGHjuYfbx31",
         ),
 
         createRow(
@@ -2497,7 +2520,7 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "fiOYJ6SPRIG"
+            "fiOYJ6SPRIG",
         ),
         createRow(
             "34",
@@ -2508,7 +2531,7 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "etKjMrhsGzx"
+            "etKjMrhsGzx",
         ),
 
         createRow(
@@ -2525,7 +2548,7 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "B5yBgVUt7ij"
+            "B5yBgVUt7ij",
         ),
 
         createRow(
@@ -2547,21 +2570,21 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "d7fhsyxUiCzF"
+            "d7fhsyxUiCzF",
         ),
         createRow(
             "37",
             [{ key: "1", label: "M", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "d7fhsyxUiCzM"
+            "d7fhsyxUiCzM",
         ),
         createRow(
             "38",
             [{ key: "1", label: "T", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "d7fhsyxUiCz"
+            "d7fhsyxUiCz",
         ),
         createRow(
             "39",
@@ -2577,7 +2600,7 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "HaW4jcu0p9U"
+            "HaW4jcu0p9U",
         ),
         createRow(
             "40",
@@ -2593,7 +2616,7 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "HqWXHCI6m5y"
+            "HqWXHCI6m5y",
         ),
         createRow(
             "41",
@@ -2609,7 +2632,7 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "wTcbcrds2w6F"
+            "wTcbcrds2w6F",
         ),
 
         createRow(
@@ -2617,28 +2640,28 @@ export const indicatorReportColumns = (
             [{ key: "1", label: "M", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "wTcbcrds2w6M"
+            "wTcbcrds2w6M",
         ),
         createRow(
             "43",
             [{ key: "1", label: "T", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "wTcbcrds2w6"
+            "wTcbcrds2w6",
         ),
         createRow(
             "44",
             [{ key: "1", label: "Children(<18)", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "wTcbcrds2w6.dHzqsjLPXzb"
+            "wTcbcrds2w6.dHzqsjLPXzb",
         ),
         createRow(
             "45",
             [{ key: "1", label: "Adults(18+)", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "wTcbcrds2w6.VCmHfkJVEDp"
+            "wTcbcrds2w6.VCmHfkJVEDp",
         ),
 
         createRow(
@@ -2655,35 +2678,35 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "MslqTqo0kdzF"
+            "MslqTqo0kdzF",
         ),
         createRow(
             "47",
             [{ key: "1", label: "M", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "MslqTqo0kdzM"
+            "MslqTqo0kdzM",
         ),
         createRow(
             "48",
             [{ key: "1", label: "T", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "MslqTqo0kdz"
+            "MslqTqo0kdz",
         ),
         createRow(
             "49",
             [{ key: "1", label: "Children(<18)", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "MslqTqo0kdz.dHzqsjLPXzb"
+            "MslqTqo0kdz.dHzqsjLPXzb",
         ),
         createRow(
             "50",
             [{ key: "1", label: "Adults(18+)", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "MslqTqo0kdz.VCmHfkJVEDp"
+            "MslqTqo0kdz.VCmHfkJVEDp",
         ),
 
         createRow(
@@ -2700,35 +2723,35 @@ export const indicatorReportColumns = (
             ],
             year,
             data,
-            "jCwcGbjVD8GF"
+            "jCwcGbjVD8GF",
         ),
         createRow(
             "52",
             [{ key: "1", label: "M", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "jCwcGbjVD8GM"
+            "jCwcGbjVD8GM",
         ),
         createRow(
             "53",
             [{ key: "1", label: "T", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "jCwcGbjVD8G"
+            "jCwcGbjVD8G",
         ),
         createRow(
             "54",
             [{ key: "1", label: "Children(<18)", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "jCwcGbjVD8G.dHzqsjLPXzb"
+            "jCwcGbjVD8G.dHzqsjLPXzb",
         ),
         createRow(
             "55",
             [{ key: "1", label: "Adults(18+)", rowSpan: 1, colSpan: 1 }],
             year,
             data,
-            "jCwcGbjVD8G.VCmHfkJVEDp"
+            "jCwcGbjVD8G.VCmHfkJVEDp",
         ),
     ];
     return rows;

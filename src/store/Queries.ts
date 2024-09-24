@@ -98,7 +98,7 @@ const processRows = (ind: string, rows: any[][]) => {
         rows.map((row: string[]) => [
             `${ind}${row.slice(0, -1).join("")}`,
             Number(row[row.length - 1]),
-        ])
+        ]),
     );
 };
 
@@ -106,7 +106,7 @@ const convertIndicators = (
     fromIndicators: string[],
     toIndicators: string[],
     quarters: string[],
-    data: any
+    data: any,
 ) => {
     let results = {};
     quarters.forEach((quarter) => {
@@ -127,14 +127,14 @@ const getTotal = (ind: string, rows: any[][]) => {
                 Object.entries(
                     groupBy(
                         rows,
-                        (row) => `${row[row.length - 3]}${row[row.length - 2]}`
-                    )
+                        (row) => `${row[row.length - 3]}${row[row.length - 2]}`,
+                    ),
                 ).map(([key, value]) => {
                     return [
                         `${ind}totals${key}`,
                         sum(value.map((vrow) => vrow[vrow.length - 1])),
                     ];
-                })
+                }),
             );
         }
 
@@ -146,8 +146,8 @@ const getTotal = (ind: string, rows: any[][]) => {
                             `${ind}totals${key}`,
                             sum(value.map((vrow) => vrow[vrow.length - 1])),
                         ];
-                    }
-                )
+                    },
+                ),
             );
         }
         return {
@@ -224,7 +224,7 @@ const hadASession = (
     participant: string,
     startDate: Date,
     endDate: Date,
-    sessions: string[]
+    sessions: string[],
 ) => {
     return !!allSessions.find((row: string[]) => {
         return (
@@ -242,12 +242,12 @@ const fetchTargets = async (
     engine: any,
     dataElements: string[],
     organisationUnits: string[],
-    periods: string[]
+    periods: string[],
 ) => {
     const query = `analytics.json?dimension=dx:${dataElements.join(
-        ";"
+        ";",
     )}&dimension=ou:${organisationUnits.join(";")}&filter=pe:${periods.join(
-        ";"
+        ";",
     )}&skipRounding=true&skipMeta=true`;
 
     const { analytics } = await engine.query({
@@ -262,12 +262,12 @@ const fetchTargets2 = async (
     engine: any,
     dataElements: string[],
     organisationUnits: string[],
-    periods: string[]
+    periods: string[],
 ) => {
     const query = `analytics.json?dimension=dx:${dataElements.join(
-        ";"
+        ";",
     )}&filter=ou:${organisationUnits.join(";")}&dimension=pe:${periods.join(
-        ";"
+        ";",
     )}&skipRounding=true&skipMeta=true`;
 
     const { analytics } = await engine.query({
@@ -286,7 +286,7 @@ const hasCompleted = (
     participant: string,
     endDate: Date,
     sessions: string[],
-    value: number
+    value: number,
 ) => {
     const doneSessions = allSessions
         .filter((row: string[]) => {
@@ -309,7 +309,7 @@ const hasCompletedWithin = (
     startDate: Date,
     endDate: Date,
     sessions: string[],
-    value: number
+    value: number,
 ) => {
     const doneSessions = allSessions
         .filter((row: string[]) => {
@@ -330,7 +330,7 @@ const hasCompletedWithin = (
 const isAtSchool = (
     age: number,
     homeVisitValue: string,
-    enrollmentValue: string
+    enrollmentValue: string,
 ) => {
     if (age >= 6 && age <= 17) {
         if (homeVisitValue) {
@@ -371,7 +371,7 @@ const eventsWithinPeriod = (
     events: any[],
     programStage: string,
     start: Date,
-    end: Date
+    end: Date,
 ) => {
     return events.filter((e: any) => {
         return (
@@ -385,7 +385,7 @@ const eventsWithinPeriod = (
 const findAnyEventValue = (events: any[], dataElement: string) => {
     const sortedEvents = sortBy(events, (e: any) => e.eventDate).reverse();
     const event = sortedEvents.find(
-        ({ [dataElement]: de }: any) => de !== null && de !== undefined
+        ({ [dataElement]: de }: any) => de !== null && de !== undefined,
     );
     if (event) {
         return event[dataElement];
@@ -396,7 +396,7 @@ const findAnyEventValue = (events: any[], dataElement: string) => {
 const allValues4DataElement = (
     events: any[],
     dataElement: string,
-    value: string
+    value: string,
 ) => {
     if (events.length > 0) {
         return events.every((e: any) => e[dataElement] === value);
@@ -408,7 +408,7 @@ const allValues4DataElement = (
 const anyEventWithDataElement = (
     events: any[],
     dataElement: string,
-    value: string
+    value: string,
 ) => {
     if (events.length === 0) {
         return false;
@@ -431,7 +431,7 @@ const anyEventWithDE = (events: any[], dataElement: string) => {
 const anyEventWithAnyOfTheValue = (
     events: any[],
     dataElement: string,
-    values: string[]
+    values: string[],
 ) => {
     const processed = events.find((event: any) => {
         return values.indexOf(event[dataElement]) !== -1;
@@ -460,7 +460,7 @@ const hasAYes = (event: any | undefined, dataElements: string[]) => {
 const allHaveValue = (
     event: any | undefined,
     dataElements: string[],
-    value: any
+    value: any,
 ) => {
     if (event) {
         const de = dataElements
@@ -476,7 +476,7 @@ const allHaveValue = (
 const checkRiskAssessment = (
     event: any | undefined,
     dataElements: string[],
-    value?: any
+    value?: any,
 ) => {
     if (event) {
         const de = dataElements
@@ -508,7 +508,7 @@ const checkRiskAssessment = (
 const hasDataElementWithinPeriod = (
     events: any[],
     dataElement: string,
-    value: string
+    value: string,
 ) => {
     return !!events.find((e: any) => e[dataElement] === value);
 };
@@ -690,7 +690,7 @@ export function useLoader() {
                     id,
                     fromPairs(options.map(({ code, name }) => [code, name])),
                 ];
-            }
+            },
         );
         const processedUnits = dataViewOrganisationUnits.map((unit: any) => {
             return {
@@ -710,9 +710,9 @@ export function useLoader() {
                         parent: pId,
                         parentName: pName,
                     };
-                }
+                },
             ),
-            "parent"
+            "parent",
         );
         setUserOrgUnits(processedUnits);
         setSelectedOrgUnits([dataViewOrganisationUnits[0].id]);
@@ -721,7 +721,7 @@ export function useLoader() {
             "MOH Journeys curriculum": options1.map((o: any) => o.code),
             "No means No sessions (Boys)": options2.map((o: any) => o.code),
             "No means No sessions (Boys) New Curriculum": options12.map(
-                (o: any) => o.code
+                (o: any) => o.code,
             ),
             "No means No sessions (Girls)": options3.map((o: any) => o.code),
             "VSLA Methodology": options4.map((o: any) => o.code),
@@ -739,11 +739,11 @@ export function useLoader() {
                 ({ label, value }: any) => [
                     String(label).split(" ")[0].toUpperCase(),
                     value,
-                ]
-            )
+                ],
+            ),
         );
         const maxLevel = max(
-            dataViewOrganisationUnits.map(({ level }: any) => level)
+            dataViewOrganisationUnits.map(({ level }: any) => level),
         );
         setDistricts(
             districts.flatMap(({ ip, district }: any) => {
@@ -762,7 +762,7 @@ export function useLoader() {
                                 return [
                                     ...children.map(({ id }: any) => id),
                                     ...kampalaDivisions.map(
-                                        ({ value }) => value
+                                        ({ value }) => value,
                                     ),
                                 ];
                             }
@@ -776,7 +776,7 @@ export function useLoader() {
                         .flatMap(({ id }: any) => {
                             if (id === "aXmBzv61LbM") {
                                 return kampalaDivisions.map(
-                                    ({ value }) => value
+                                    ({ value }) => value,
                                 );
                             }
                             return id;
@@ -787,7 +787,7 @@ export function useLoader() {
                 }
 
                 return [];
-            })
+            }),
         );
         setSubCounties(processedSubCounties);
         setPrograms(programs);
@@ -802,10 +802,10 @@ export function useLoader() {
 
 export const fetchUnits4Instances = async (
     engine: any,
-    trackedEntityInstances: any[]
+    trackedEntityInstances: any[],
 ) => {
     const orgUnits = uniq(
-        trackedEntityInstances.map(({ orgUnit }: any) => orgUnit)
+        trackedEntityInstances.map(({ orgUnit }: any) => orgUnit),
     );
 
     const {
@@ -829,14 +829,14 @@ export const fetchUnits4Instances = async (
                     district: unit.parent?.parent?.name,
                 },
             ];
-        })
+        }),
     );
 };
 
 export const fetchRelationships4Instances = async (
     engine: any,
     trackedEntityInstances: any[],
-    ou: string
+    ou: string,
 ) => {
     const currentData = trackedEntityInstances.map(
         ({ relationships: [relationship] }) => {
@@ -844,7 +844,7 @@ export const fetchRelationships4Instances = async (
                 return relationship?.from?.trackedEntityInstance
                     .trackedEntityInstance;
             }
-        }
+        },
     );
     const {
         indexes: { trackedEntityInstances: indexCases },
@@ -864,31 +864,31 @@ export const fetchRelationships4Instances = async (
     return fromPairs(
         indexCases.map((indexCase: any) => {
             return [indexCase.trackedEntityInstance, indexCase];
-        })
+        }),
     );
 };
 
 export const fetchGroupActivities4Instances = async (
     engine: any,
     trackedEntityInstances: any[],
-    ou: string
+    ou: string,
 ) => {
     const householdMemberCodes = trackedEntityInstances.flatMap(
         ({ attributes }: any) => {
             const attribute = attributes.find(
-                (a: any) => a.attribute === "HLKc2AKR9jW"
+                (a: any) => a.attribute === "HLKc2AKR9jW",
             );
             if (attribute) {
                 return [attribute.value];
             }
             return [];
-        }
+        },
     );
 
     const facilities = uniq(
         trackedEntityInstances.map(({ orgUnit }) => {
             return orgUnit;
-        })
+        }),
     );
 
     const allQueries = facilities.map((f) => {
@@ -929,10 +929,10 @@ export const processPrevention = async (
     engine: any,
     trackedEntityInstances: any[],
     sessions: { [key: string]: string[] },
-    period: [Date, Date]
+    period: [Date, Date],
 ) => {
     const orgUnits = uniq(
-        trackedEntityInstances.map(({ orgUnit }: any) => orgUnit)
+        trackedEntityInstances.map(({ orgUnit }: any) => orgUnit),
     );
 
     const {
@@ -957,7 +957,7 @@ export const processPrevention = async (
                     district: unit.parent?.parent?.name,
                 },
             ];
-        })
+        }),
     );
 
     return trackedEntityInstances.flatMap(
@@ -965,7 +965,7 @@ export const processPrevention = async (
             const units: any = processedUnits[orgUnit];
             const [{ events, enrollmentDate, orgUnitName }] = enrollments;
             const instance = fromPairs(
-                attributes.map((a: any) => [a.attribute, a.value])
+                attributes.map((a: any) => [a.attribute, a.value]),
             );
             const doneSessions = events
                 .filter((event: any) => {
@@ -980,10 +980,10 @@ export const processPrevention = async (
                 })
                 .map(({ dataValues }: any) => {
                     const code = dataValues.find(
-                        ({ dataElement }: any) => dataElement === "ypDUCAS6juy"
+                        ({ dataElement }: any) => dataElement === "ypDUCAS6juy",
                     );
                     const session = dataValues.find(
-                        ({ dataElement }: any) => dataElement === "n20LkH4ZBF8"
+                        ({ dataElement }: any) => dataElement === "n20LkH4ZBF8",
                     );
                     return { session: session?.value, code: code?.value };
                 });
@@ -999,7 +999,7 @@ export const processPrevention = async (
                         event.dataValues.map((dv: any) => [
                             dv.dataElement,
                             dv.value,
-                        ])
+                        ]),
                     );
                     const individualCode: any = elements.ypDUCAS6juy;
                     const participantSessions = groupedSessions[
@@ -1013,7 +1013,7 @@ export const processPrevention = async (
                         participantSessions?.map(({ session }: any) => [
                             session,
                             1,
-                        ])
+                        ]),
                     );
                     return {
                         event: event.event,
@@ -1034,7 +1034,7 @@ export const processPrevention = async (
                                 : 0,
                     };
                 });
-        }
+        },
     );
 };
 
@@ -1051,13 +1051,13 @@ export const processInstances = (
         participantIndex: number;
         sessionDateIndex: number;
     },
-    previousData: { [key: string]: any }
+    previousData: { [key: string]: any },
 ) => {
     const quarterStart: Date = period.startOf("quarter").toDate();
     const quarterEnd: Date = period.endOf("quarter").toDate();
     const [financialQuarterStart, financialQuarterEnd] = calculateQuarter(
         quarterStart.getFullYear(),
-        period.quarter()
+        period.quarter(),
     );
     const { rows, sessionNameIndex, participantIndex, sessionDateIndex } =
         groupActivities;
@@ -1095,11 +1095,11 @@ export const processInstances = (
                                         ({ dataElement, value }: any) => [
                                             dataElement,
                                             value,
-                                        ]
-                                    )
+                                        ],
+                                    ),
                                 ),
                             };
-                        }
+                        },
                     );
             });
 
@@ -1113,7 +1113,7 @@ export const processInstances = (
                 attributes.map(({ attribute, value }: any) => [
                     `${program}.${attribute}`,
                     value,
-                ])
+                ]),
             );
             child = {
                 trackedEntityInstance,
@@ -1141,13 +1141,13 @@ export const processInstances = (
                 };
                 if (event) {
                     const healthExpenses = event.dataValues.find(
-                        (e: any) => e.dataElement === "zbAGBW6PsGd"
+                        (e: any) => e.dataElement === "zbAGBW6PsGd",
                     );
                     const schoolExpenses = event.dataValues.find(
-                        (e: any) => e.dataElement === "kQCB9F39zWO"
+                        (e: any) => e.dataElement === "kQCB9F39zWO",
                     );
                     const foodExpenses = event.dataValues.find(
-                        (e: any) => e.dataElement === "iRJUDyUBLQF"
+                        (e: any) => e.dataElement === "iRJUDyUBLQF",
                     );
                     const score18 = [
                         healthExpenses?.value,
@@ -1156,10 +1156,10 @@ export const processInstances = (
                     ].filter((v: any) => v !== undefined && v !== null);
 
                     const yeses = score18.filter(
-                        (v: string) => v === "Yes"
+                        (v: string) => v === "Yes",
                     ).length;
                     const noses = score18.filter(
-                        (v: string) => v === "No"
+                        (v: string) => v === "No",
                     ).length;
                     let houseHoldType = "";
                     const { programStage: parentProgramStage, eventDate } =
@@ -1187,7 +1187,7 @@ export const processInstances = (
                         parent.attributes.map(({ attribute, value }: any) => [
                             `${parentProgram}.${attribute}`,
                             value,
-                        ])
+                        ]),
                     ),
                     hasEnrollment: !!enrollmentDate,
                     ...eventDetails,
@@ -1202,20 +1202,20 @@ export const processInstances = (
             const heiData = eventsBeforePeriod(
                 allEvents,
                 "KOFm3jJl7n7",
-                quarterEnd
+                quarterEnd,
             );
             // One Year before quarter end starting octerber
             const riskAssessmentsDuringYear = eventsWithinPeriod(
                 allEvents,
                 "B9EI27lmQrZ",
                 financialQuarterStart,
-                financialQuarterEnd
+                financialQuarterEnd,
             );
             const referralsDuringYear = eventsWithinPeriod(
                 allEvents,
                 "yz3zh5IFEZm",
                 financialQuarterStart,
-                financialQuarterEnd
+                financialQuarterEnd,
             );
 
             // During Quarter
@@ -1224,33 +1224,33 @@ export const processInstances = (
                 allEvents,
                 "yz3zh5IFEZm",
                 quarterStart,
-                quarterEnd
+                quarterEnd,
             );
 
             const homeVisitsDuringQuarter = eventsWithinPeriod(
                 allEvents,
                 "HaaSLv2ur0l",
                 quarterStart,
-                quarterEnd
+                quarterEnd,
             );
             const viralLoadDuringQuarter = eventsWithinPeriod(
                 allEvents,
                 "kKlAyGUnCML",
                 quarterStart,
-                quarterEnd
+                quarterEnd,
             );
 
             const serviceProvisionDuringQuarter = eventsWithinPeriod(
                 allEvents,
                 "yz3zh5IFEZm",
                 quarterStart,
-                quarterEnd
+                quarterEnd,
             );
             const serviceLinkagesDuringQuarter = eventsWithinPeriod(
                 allEvents,
                 "SxnXrDtSJZp",
                 quarterStart,
-                quarterEnd
+                quarterEnd,
             );
 
             // Before or during quarter starts
@@ -1258,34 +1258,34 @@ export const processInstances = (
             const previousReferrals = eventsBeforePeriod(
                 allEvents,
                 "yz3zh5IFEZm",
-                quarterStart
+                quarterStart,
             );
 
             const previousViralLoads = eventsBeforePeriod(
                 allEvents,
                 "yz3zh5IFEZm",
-                quarterStart
+                quarterStart,
             );
 
             const homeVisitsBe4Quarter = eventsBeforePeriod(
                 allEvents,
                 "HaaSLv2ur0l",
-                quarterEnd
+                quarterEnd,
             );
             const viralLoadsBe4Quarter = eventsBeforePeriod(
                 allEvents,
                 "kKlAyGUnCML",
-                quarterEnd
+                quarterEnd,
             );
 
             const currentRiskAssessment = mostCurrentEvent(
-                riskAssessmentsDuringYear
+                riskAssessmentsDuringYear,
             );
             const currentReferral = mostCurrentEvent(referralsDuringYear);
             const anyViralLoad = mostCurrentEvent(viralLoadsBe4Quarter);
             const hivResult = specificDataElement(
                 currentReferral,
-                "XTdRWh5MqPw"
+                "XTdRWh5MqPw",
             );
 
             child = {
@@ -1305,49 +1305,49 @@ export const processInstances = (
             if (age <= 2) {
                 const eidEnrollmentDate = findAnyEventValue(
                     heiData,
-                    "sDMDb4InL5F"
+                    "sDMDb4InL5F",
                 );
                 const motherArtNo = findAnyEventValue(heiData, "P6KEPNorRTT");
                 const eidNo = findAnyEventValue(heiData, "Qyp4adG3KJL");
 
                 const dateFirstPCRDone = findAnyEventValue(
                     heiData,
-                    "yTSlwP6htQh"
+                    "yTSlwP6htQh",
                 );
                 const firstPCRResults = findAnyEventValue(
                     heiData,
-                    "fUY7DEjsZin"
+                    "fUY7DEjsZin",
                 );
 
                 const dateSecondPCRDone = findAnyEventValue(
                     heiData,
-                    "TJPxuJHRA3P"
+                    "TJPxuJHRA3P",
                 );
                 const secondPCRResults = findAnyEventValue(
                     heiData,
-                    "TX2qmTSj0rM"
+                    "TX2qmTSj0rM",
                 );
 
                 const dateThirdPCRDone = findAnyEventValue(
                     heiData,
-                    "r0zBP8h3UEl"
+                    "r0zBP8h3UEl",
                 );
                 const thirdPCRResults = findAnyEventValue(
                     heiData,
-                    "G0YhL0M4YjJ"
+                    "G0YhL0M4YjJ",
                 );
 
                 const hivTestDueDate = findAnyEventValue(
                     heiData,
-                    "CWqTgshbDbW"
+                    "CWqTgshbDbW",
                 );
                 const dateHivTestDone = findAnyEventValue(
                     heiData,
-                    "qitG6coAg3q"
+                    "qitG6coAg3q",
                 );
                 const hivTestResults = findAnyEventValue(
                     heiData,
-                    "lznDPbUscke"
+                    "lznDPbUscke",
                 );
                 const finalOutcome = findAnyEventValue(heiData, "fcAZR5zt9i3");
 
@@ -1460,12 +1460,12 @@ export const processInstances = (
                     "h7JCV3YLRJO",
                     "VtnameiqmRy",
                 ],
-                "false"
+                "false",
             );
 
             const tbScreeningChild = checkRiskAssessment(
                 currentRiskAssessment,
-                ["DgCXKSDPTWn", "Rs5qrKay7Gq", "QEm2B8LZtzd", "X9n17I5Ibdf"]
+                ["DgCXKSDPTWn", "Rs5qrKay7Gq", "QEm2B8LZtzd", "X9n17I5Ibdf"],
             );
             const tbScreeningChild17 = checkRiskAssessment(
                 currentRiskAssessment,
@@ -1475,17 +1475,17 @@ export const processInstances = (
                     "QEm2B8LZtzd",
                     "X9n17I5Ibdf",
                     "Oi6CUuucUCP",
-                ]
+                ],
             );
             const tbScreeningAdult = checkRiskAssessment(
                 currentRiskAssessment,
-                ["If8hDeux5XE", "ha2nnIeFgbu", "NMtrXN3NBqY", "Oi6CUuucUCP"]
+                ["If8hDeux5XE", "ha2nnIeFgbu", "NMtrXN3NBqY", "Oi6CUuucUCP"],
             );
 
             const atTBRiskChild = checkRiskAssessment(
                 currentRiskAssessment,
                 ["DgCXKSDPTWn", "Rs5qrKay7Gq", "QEm2B8LZtzd", "X9n17I5Ibdf"],
-                "true"
+                "true",
             );
             const atTBRiskChild17 = checkRiskAssessment(
                 currentRiskAssessment,
@@ -1496,12 +1496,12 @@ export const processInstances = (
                     "X9n17I5Ibdf",
                     "Oi6CUuucUCP",
                 ],
-                "true"
+                "true",
             );
             const atTBRiskAdult = checkRiskAssessment(
                 currentRiskAssessment,
                 ["If8hDeux5XE", "ha2nnIeFgbu", "NMtrXN3NBqY", "Oi6CUuucUCP"],
-                "true"
+                "true",
             );
 
             const isNotAtRisk = checkRiskAssessment(
@@ -1516,15 +1516,15 @@ export const processInstances = (
                     "dunvFwnbGQF",
                     "oI9btGSwA7P",
                 ],
-                "false"
+                "false",
             );
             const serviceProvided = specificDataElement(
                 currentReferral,
-                "XWudTD2LTUQ"
+                "XWudTD2LTUQ",
             );
             const unknownOther = findAnyEventValue(
                 riskAssessmentsDuringYear,
-                "cTV8aMqnVbe"
+                "cTV8aMqnVbe",
             );
 
             child = {
@@ -1621,7 +1621,7 @@ export const processInstances = (
                 ...child,
                 householdStatus: !!findAnyEventValue(
                     homeVisitsBe4Quarter,
-                    "PpUByWk3p8N"
+                    "PpUByWk3p8N",
                 )
                     ? findAnyEventValue(homeVisitsBe4Quarter, "PpUByWk3p8N")
                     : child["hasEnrollment"]
@@ -1633,27 +1633,27 @@ export const processInstances = (
                 enrolledInSchool: isAtSchool(
                     age,
                     "",
-                    child["RDEklSXCD4C.h4pXErY01YR"] as any
+                    child["RDEklSXCD4C.h4pXErY01YR"] as any,
                 ),
             };
 
             const homeVisitor = findAnyEventValue(
                 homeVisitsBe4Quarter,
-                "i6XGAmzx3Ri"
+                "i6XGAmzx3Ri",
             );
             const dataEntrant = findAnyEventValue(
                 homeVisitsDuringQuarter,
-                "YY5zG4Bh898"
+                "YY5zG4Bh898",
             );
             const dataEntrant1 = child["HEWq6yr4cs5.Xkwy5P2JG24"];
 
             const dataEntrant2 = findAnyEventValue(
                 viralLoadDuringQuarter,
-                "YY5zG4Bh898"
+                "YY5zG4Bh898",
             );
             const homeVisitorContact = findAnyEventValue(
                 homeVisitsBe4Quarter,
-                "BMzryoryhtX"
+                "BMzryoryhtX",
             );
 
             child = {
@@ -1674,7 +1674,7 @@ export const processInstances = (
                     ...child,
                     artNo: findAnyEventValue(
                         viralLoadsBe4Quarter,
-                        "aBc9Lr1z25H"
+                        "aBc9Lr1z25H",
                     ),
                 };
 
@@ -1682,7 +1682,7 @@ export const processInstances = (
                     ...child,
                     facility: findAnyEventValue(
                         viralLoadsBe4Quarter,
-                        "usRWNcogGX7"
+                        "usRWNcogGX7",
                     ),
                 };
             }
@@ -1694,7 +1694,7 @@ export const processInstances = (
                     ...child,
                     [`onArt`]: findAnyEventValue(
                         viralLoadsBe4Quarter,
-                        "xyDBnQTdZqS"
+                        "xyDBnQTdZqS",
                     )
                         ? 1
                         : "",
@@ -1729,42 +1729,42 @@ export const processInstances = (
 
             const artStartDate = findAnyEventValue(
                 viralLoadsBe4Quarter,
-                "epmIBD8gh7G"
+                "epmIBD8gh7G",
             );
 
             const lastViralLoadDate = findAnyEventValue(
                 viralLoadsBe4Quarter,
-                "Ti0huZXbAM0"
+                "Ti0huZXbAM0",
             );
             const viralTestDone = findAnyEventValue(
                 viralLoadsBe4Quarter,
-                "cM7dovIX2Dl"
+                "cM7dovIX2Dl",
             );
             const viralLoadResultsReceived = findAnyEventValue(
                 viralLoadsBe4Quarter,
-                "te2VwealaBT"
+                "te2VwealaBT",
             );
             const viralLoadStatus = findAnyEventValue(
                 viralLoadsBe4Quarter,
-                "AmaNW7QDuOV"
+                "AmaNW7QDuOV",
             );
             const viralLoadCopies = findAnyEventValue(
                 viralLoadsBe4Quarter,
-                "b8p0uWaYRhY"
+                "b8p0uWaYRhY",
             );
             const regimen = findAnyEventValue(
                 viralLoadsBe4Quarter,
-                "nZ1omFVYFkT"
+                "nZ1omFVYFkT",
             );
             const weight = findAnyEventValue(
                 viralLoadsBe4Quarter,
-                "Kjtt7SV26zL"
+                "Kjtt7SV26zL",
             );
             if (child["hivStatus"] === "+") {
                 if (!!artStartDate) {
                     const daysOnArt = differenceInMonths(
                         quarterEnd,
-                        parseISO(artStartDate)
+                        parseISO(artStartDate),
                     );
                     if (daysOnArt >= 6) {
                         child = {
@@ -1798,7 +1798,7 @@ export const processInstances = (
                 if (!!lastViralLoadDate && child.ovcEligible === 1) {
                     const monthsSinceLastViralLoad = differenceInMonths(
                         quarterEnd,
-                        parseISO(lastViralLoadDate)
+                        parseISO(lastViralLoadDate),
                     );
                     if (monthsSinceLastViralLoad <= 12) {
                         child = {
@@ -1871,7 +1871,7 @@ export const processInstances = (
                         ...sessions["VSLA Methodology"],
                         ...sessions["VSLA TOT"],
                         ...sessions["Saving and Borrowing"],
-                    ]
+                    ],
                 )
                     ? 1
                     : 0,
@@ -1886,7 +1886,7 @@ export const processInstances = (
                     child["RDEklSXCD4C.HLKc2AKR9jW"],
                     quarterStart,
                     quarterEnd,
-                    sessions["Financial Literacy"]
+                    sessions["Financial Literacy"],
                 )
                     ? 1
                     : 0,
@@ -1894,11 +1894,11 @@ export const processInstances = (
                     (anyEventWithDE(homeVisitsDuringQuarter, "PBiFAeCVnot") ||
                         anyEventWithDE(
                             homeVisitsDuringQuarter,
-                            "Xlw16qiDxqk"
+                            "Xlw16qiDxqk",
                         ) ||
                         anyEventWithDE(
                             homeVisitsDuringQuarter,
-                            "rOTbGzSfKbs"
+                            "rOTbGzSfKbs",
                         )) &&
                     age >= 15
                         ? 1
@@ -1914,7 +1914,7 @@ export const processInstances = (
                             "F1. Access credit services",
                             "F2. Access saving services",
                             "F3. Insurance services/ Health Fund",
-                        ]
+                        ],
                     ) ||
                     hadASession(
                         rows,
@@ -1924,7 +1924,7 @@ export const processInstances = (
                         child["RDEklSXCD4C.HLKc2AKR9jW"],
                         quarterStart,
                         quarterEnd,
-                        sessions["Bank Linkages"]
+                        sessions["Bank Linkages"],
                     )
                         ? 1
                         : 0,
@@ -1938,7 +1938,7 @@ export const processInstances = (
                         "A1. Input Markets through voucher",
                         "A2. input such as seeds and poultry",
                         "A3. training in agricultural production",
-                    ]
+                    ],
                 )
                     ? 1
                     : 0,
@@ -1953,7 +1953,7 @@ export const processInstances = (
                     child["RDEklSXCD4C.HLKc2AKR9jW"],
                     quarterStart,
                     quarterEnd,
-                    sessions["SPM Training"]
+                    sessions["SPM Training"],
                 )
                     ? 1
                     : 0,
@@ -1966,7 +1966,7 @@ export const processInstances = (
                     [
                         "B1. Access to credit services",
                         "B2. Access to saving services",
-                    ]
+                    ],
                 )
                     ? 1
                     : 0,
@@ -1976,7 +1976,7 @@ export const processInstances = (
                 igaBooster: anyEventWithAnyOfTheValue(
                     serviceLinkagesDuringQuarter,
                     "NxQ4EZUB0fr",
-                    ["O3. IGA Booster"]
+                    ["O3. IGA Booster"],
                 )
                     ? 1
                     : 0,
@@ -1987,12 +1987,12 @@ export const processInstances = (
                     anyEventWithAnyOfTheValue(
                         serviceLinkagesDuringQuarter,
                         "NxQ4EZUB0fr",
-                        ["UF12 Temporary Food Support"]
+                        ["UF12 Temporary Food Support"],
                     ) ||
                     anyEventWithAnyOfTheValue(
                         referralsDuringQuarter,
                         "XWudTD2LTUQ",
-                        ["Temporary Food Support"]
+                        ["Temporary Food Support"],
                     )
                         ? 1
                         : 0,
@@ -2002,7 +2002,7 @@ export const processInstances = (
                 vlsaOvcFund: anyEventWithAnyOfTheValue(
                     serviceLinkagesDuringQuarter,
                     "NxQ4EZUB0fr",
-                    ["UF3 VSLA OVC protection Fund"]
+                    ["UF3 VSLA OVC protection Fund"],
                 )
                     ? 1
                     : 0,
@@ -2012,7 +2012,7 @@ export const processInstances = (
                 educationFund: anyEventWithAnyOfTheValue(
                     serviceLinkagesDuringQuarter,
                     "NxQ4EZUB0fr",
-                    ["UF09 OVC VSLA Education Fund"]
+                    ["UF09 OVC VSLA Education Fund"],
                 )
                     ? 1
                     : 0,
@@ -2022,7 +2022,7 @@ export const processInstances = (
                 heathFund: anyEventWithAnyOfTheValue(
                     serviceLinkagesDuringQuarter,
                     "NxQ4EZUB0fr",
-                    ["UF10 OVC VSLA Health Fund"]
+                    ["UF10 OVC VSLA Health Fund"],
                 )
                     ? 1
                     : 0,
@@ -2034,12 +2034,12 @@ export const processInstances = (
                     anyEventWithAnyOfTheValue(
                         serviceLinkagesDuringQuarter,
                         "NxQ4EZUB0fr",
-                        ["O1. Education subsidy"]
+                        ["O1. Education subsidy"],
                     ) ||
                     anyEventWithAnyOfTheValue(
                         referralsDuringQuarter,
                         "XWudTD2LTUQ",
-                        ["Educational support"]
+                        ["Educational support"],
                     )
                         ? 1
                         : 0,
@@ -2049,7 +2049,7 @@ export const processInstances = (
                 homeLearning: anyEventWithAnyOfTheValue(
                     serviceLinkagesDuringQuarter,
                     "NxQ4EZUB0fr",
-                    ["Home Learning"]
+                    ["Home Learning"],
                 )
                     ? 1
                     : 0,
@@ -2060,12 +2060,12 @@ export const processInstances = (
                     anyEventWithAnyOfTheValue(
                         serviceLinkagesDuringQuarter,
                         "NxQ4EZUB0fr",
-                        ["O2. None Formal Education"]
+                        ["O2. None Formal Education"],
                     ) ||
                     anyEventWithAnyOfTheValue(
                         referralsDuringQuarter,
                         "XWudTD2LTUQ",
-                        ["Vocational/Apprenticeship"]
+                        ["Vocational/Apprenticeship"],
                     )
                         ? 1
                         : 0,
@@ -2077,15 +2077,15 @@ export const processInstances = (
                     (anyEventWithDE(homeVisitsDuringQuarter, "sTyaaJxvR5S") ||
                         anyEventWithDE(
                             homeVisitsDuringQuarter,
-                            "oyQActIi370"
+                            "oyQActIi370",
                         ) ||
                         anyEventWithDE(
                             homeVisitsDuringQuarter,
-                            "P7nd91Mkhol"
+                            "P7nd91Mkhol",
                         ) ||
                         anyEventWithDE(
                             homeVisitsDuringQuarter,
-                            "leNiACgoBcL"
+                            "leNiACgoBcL",
                         )) &&
                     age >= 6
                         ? 1
@@ -2103,7 +2103,7 @@ export const processInstances = (
                 anyEventWithAnyOfTheValue(
                     serviceLinkagesDuringQuarter,
                     "HzDRzHCuzdf",
-                    ["HTS"]
+                    ["HTS"],
                 )
             ) {
                 child = { ...child, HTSReferral: 1 };
@@ -2124,7 +2124,7 @@ export const processInstances = (
                 artInitiation: anyEventWithAnyOfTheValue(
                     referralsDuringQuarter,
                     "XWudTD2LTUQ",
-                    ["Initiated on HIV Treatment"]
+                    ["Initiated on HIV Treatment"],
                 )
                     ? 1
                     : 0,
@@ -2150,12 +2150,12 @@ export const processInstances = (
                     anyEventWithDataElement(
                         viralLoadDuringQuarter,
                         "iHdNYfm1qlz",
-                        "true"
+                        "true",
                     ) ||
                     anyEventWithAnyOfTheValue(
                         referralsDuringQuarter,
                         "XWudTD2LTUQ",
-                        ["Intensive Adherence Counseling (IAC)"]
+                        ["Intensive Adherence Counseling (IAC)"],
                     )
                         ? 1
                         : 0,
@@ -2168,7 +2168,7 @@ export const processInstances = (
                     anyEventWithAnyOfTheValue(
                         referralsDuringQuarter,
                         "XWudTD2LTUQ",
-                        ["EMTCT"]
+                        ["EMTCT"],
                     )
                         ? 1
                         : 0,
@@ -2177,7 +2177,7 @@ export const processInstances = (
                 ...child,
                 hivPrevention: anyEventWithDE(
                     homeVisitsDuringQuarter,
-                    "xXqKqvuwA8m"
+                    "xXqKqvuwA8m",
                 )
                     ? 1
                     : 0,
@@ -2192,7 +2192,7 @@ export const processInstances = (
                     child["RDEklSXCD4C.HLKc2AKR9jW"],
                     quarterEnd,
                     sessions["MOH Journeys curriculum"],
-                    mapping2["MOH Journeys curriculum"]
+                    mapping2["MOH Journeys curriculum"],
                 )
                     ? 1
                     : 0,
@@ -2207,7 +2207,7 @@ export const processInstances = (
                     child["RDEklSXCD4C.HLKc2AKR9jW"],
                     quarterEnd,
                     sessions["MOE Journeys Plus"],
-                    mapping2["MOE Journeys Plus"]
+                    mapping2["MOE Journeys Plus"],
                 )
                     ? 1
                     : 0,
@@ -2222,7 +2222,7 @@ export const processInstances = (
                     child["RDEklSXCD4C.HLKc2AKR9jW"],
                     quarterEnd,
                     sessions["No means No sessions (Boys)"],
-                    mapping2["No means No sessions (Boys)"]
+                    mapping2["No means No sessions (Boys)"],
                 )
                     ? 1
                     : 0,
@@ -2237,7 +2237,7 @@ export const processInstances = (
                     child["RDEklSXCD4C.HLKc2AKR9jW"],
                     quarterEnd,
                     sessions["No means No sessions (Girls)"],
-                    mapping2["No means No sessions (Girls)"]
+                    mapping2["No means No sessions (Girls)"],
                 )
                     ? 1
                     : 0,
@@ -2247,7 +2247,7 @@ export const processInstances = (
                 TFHealth: anyEventWithAnyOfTheValue(
                     serviceLinkagesDuringQuarter,
                     "NxQ4EZUB0fr",
-                    ["Transport to Facility"]
+                    ["Transport to Facility"],
                 )
                     ? 1
                     : 0,
@@ -2257,7 +2257,7 @@ export const processInstances = (
                 PEP: anyEventWithAnyOfTheValue(
                     serviceProvisionDuringQuarter,
                     "XWudTD2LTUQ",
-                    ["PEP"]
+                    ["PEP"],
                 )
                     ? 1
                     : 0,
@@ -2266,7 +2266,7 @@ export const processInstances = (
                 ...child,
                 covid19Education: anyEventWithDE(
                     homeVisitsDuringQuarter,
-                    "RtQudbqa6XH"
+                    "RtQudbqa6XH",
                 )
                     ? 1
                     : 0,
@@ -2277,7 +2277,7 @@ export const processInstances = (
                 immunization: anyEventWithAnyOfTheValue(
                     referralsDuringQuarter,
                     "XWudTD2LTUQ",
-                    ["Immunisation"]
+                    ["Immunisation"],
                 )
                     ? 1
                     : 0,
@@ -2290,7 +2290,7 @@ export const processInstances = (
                     anyEventWithAnyOfTheValue(
                         referralsDuringQuarter,
                         "XWudTD2LTUQ",
-                        ["WASH"]
+                        ["WASH"],
                     )
                         ? 1
                         : 0,
@@ -2300,7 +2300,7 @@ export const processInstances = (
                 treatedNets: anyEventWithAnyOfTheValue(
                     referralsDuringQuarter,
                     "XWudTD2LTUQ",
-                    ["Insecticide Treated Nets"]
+                    ["Insecticide Treated Nets"],
                 )
                     ? 1
                     : 0,
@@ -2310,7 +2310,7 @@ export const processInstances = (
                 familyPlanning: anyEventWithAnyOfTheValue(
                     referralsDuringQuarter,
                     "XWudTD2LTUQ",
-                    ["Family planning services"]
+                    ["Family planning services"],
                 )
                     ? 1
                     : 0,
@@ -2320,7 +2320,7 @@ export const processInstances = (
                 tested4TB: anyEventWithAnyOfTheValue(
                     referralsDuringQuarter,
                     "XWudTD2LTUQ",
-                    ["Tested for TB"]
+                    ["Tested for TB"],
                 )
                     ? 1
                     : 0,
@@ -2330,7 +2330,7 @@ export const processInstances = (
                 initiatedOnTB: anyEventWithAnyOfTheValue(
                     referralsDuringQuarter,
                     "XWudTD2LTUQ",
-                    ["Initiated on TB Treatment"]
+                    ["Initiated on TB Treatment"],
                 )
                     ? 1
                     : 0,
@@ -2340,7 +2340,7 @@ export const processInstances = (
                 supported2CompleteTBDose: anyEventWithAnyOfTheValue(
                     referralsDuringQuarter,
                     "XWudTD2LTUQ",
-                    ["Supported to Complete TB Dose"]
+                    ["Supported to Complete TB Dose"],
                 )
                     ? 1
                     : 0,
@@ -2351,12 +2351,12 @@ export const processInstances = (
                     anyEventWithAnyOfTheValue(
                         referralsDuringQuarter,
                         "XWudTD2LTUQ",
-                        ["Viral Load Testing"]
+                        ["Viral Load Testing"],
                     ) ||
                     anyEventWithAnyOfTheValue(
                         serviceLinkagesDuringQuarter,
                         "NxQ4EZUB0fr",
-                        ["HTS7. Viral load test"]
+                        ["HTS7. Viral load test"],
                     )
                         ? 1
                         : 0,
@@ -2366,7 +2366,7 @@ export const processInstances = (
                 returnedToCare: anyEventWithAnyOfTheValue(
                     serviceLinkagesDuringQuarter,
                     "NxQ4EZUB0fr",
-                    ["PLHIV Returned to care"]
+                    ["PLHIV Returned to care"],
                 )
                     ? 1
                     : 0,
@@ -2421,12 +2421,12 @@ export const processInstances = (
                     anyEventWithDataElement(
                         referralsDuringQuarter,
                         "XWudTD2LTUQ",
-                        "Transport GBV"
+                        "Transport GBV",
                     ) ||
                     anyEventWithDataElement(
                         serviceLinkagesDuringQuarter,
                         "NxQ4EZUB0fr",
-                        "Transport GBV"
+                        "Transport GBV",
                     )
                         ? 1
                         : 0,
@@ -2436,7 +2436,7 @@ export const processInstances = (
                 referral4LegalSupport: anyEventWithDataElement(
                     referralsDuringQuarter,
                     "EDa2GQUCbsx",
-                    "Legal Support"
+                    "Legal Support",
                 )
                     ? 1
                     : 0,
@@ -2451,7 +2451,7 @@ export const processInstances = (
                     child["RDEklSXCD4C.HLKc2AKR9jW"],
                     quarterStart,
                     quarterEnd,
-                    sessions["ECD"]
+                    sessions["ECD"],
                 )
                     ? 1
                     : 0,
@@ -2467,7 +2467,7 @@ export const processInstances = (
                     quarterStart,
                     quarterEnd,
                     sessions["SINOVUYO"],
-                    mapping2["SINOVUYO"]
+                    mapping2["SINOVUYO"],
                 )
                     ? 1
                     : 0,
@@ -2483,7 +2483,7 @@ export const processInstances = (
                     child["RDEklSXCD4C.HLKc2AKR9jW"],
                     quarterStart,
                     quarterEnd,
-                    sessions["SINOVUYO"]
+                    sessions["SINOVUYO"],
                 )
                     ? 1
                     : 0,
@@ -2526,7 +2526,7 @@ export const processInstances = (
                 voucher4CropsOrKitchenGardens: anyEventWithAnyOfTheValue(
                     serviceLinkagesDuringQuarter,
                     "NxQ4EZUB0fr",
-                    ["A1. Input Markets through voucher", "M3 Input Vouchers"]
+                    ["A1. Input Markets through voucher", "M3 Input Vouchers"],
                 )
                     ? 1
                     : 0,
@@ -2537,7 +2537,7 @@ export const processInstances = (
                 kitchenGarden: anyEventWithAnyOfTheValue(
                     serviceLinkagesDuringQuarter,
                     "NxQ4EZUB0fr",
-                    ["A2. input such as seeds and poultry"]
+                    ["A2. input such as seeds and poultry"],
                 )
                     ? 1
                     : 0,
@@ -2822,7 +2822,7 @@ export const processInstances = (
                     allValues4DataElement(
                         previousReferrals,
                         "XTdRWh5MqPw",
-                        "Negative"
+                        "Negative",
                     )
                 ) {
                     child = { ...child, newlyPositive: 1 };
@@ -2845,7 +2845,7 @@ export const processInstances = (
                 hasDataElementWithinPeriod(
                     referralsDuringYear,
                     "XTdRWh5MqPw",
-                    "Positive"
+                    "Positive",
                 )
             ) {
                 child = { ...child, newlyTestedPositive: 1 };
@@ -2919,7 +2919,7 @@ export const processInstances = (
                 child = { ...child, exitedWithGraduation: child.memberStatus };
             }
             return [trackedEntityInstance, child];
-        }
+        },
     );
     return fromPairs(instances);
 };
@@ -2929,7 +2929,7 @@ export const useComprehensiveProgramStage = (
     period: [Date, Date],
     sessions: { [key: string]: string[] },
     page: number,
-    pageSize: number
+    pageSize: number,
 ) => {
     const engine = useDataEngine();
     return useQuery<any, Error>(
@@ -2973,12 +2973,12 @@ export const useComprehensiveProgramStage = (
                     engine,
                     trackedEntityInstances,
                     sessions,
-                    period
+                    period,
                 );
             }
             changeTotal(0);
             return [];
-        }
+        },
     );
 };
 
@@ -2987,7 +2987,7 @@ export const useProgramStage = (
     period: [Date, Date],
     sessions: { [key: string]: string[] },
     page: number,
-    pageSize: number
+    pageSize: number,
 ) => {
     const engine = useDataEngine();
     return useQuery<any, Error>(
@@ -3030,12 +3030,12 @@ export const useProgramStage = (
                     engine,
                     trackedEntityInstances,
                     sessions,
-                    period
+                    period,
                 );
             }
             changeTotal(0);
             return [];
-        }
+        },
     );
 };
 export const useTracker = (
@@ -3045,7 +3045,7 @@ export const useTracker = (
     period: any,
     page: number,
     pageSize: number,
-    code: string
+    code: string,
 ) => {
     const engine = useDataEngine();
     return useQuery<any, Error>(
@@ -3089,22 +3089,22 @@ export const useTracker = (
                 const filteredInstances = trackedEntityInstances.filter(
                     (instance: any) =>
                         instance.inactive === false &&
-                        instance.deleted === false
+                        instance.deleted === false,
                 );
 
                 const indexCases = await fetchRelationships4Instances(
                     engine,
                     filteredInstances,
-                    organisationUnits.join(";")
+                    organisationUnits.join(";"),
                 );
                 const processedUnits = await fetchUnits4Instances(
                     engine,
-                    filteredInstances
+                    filteredInstances,
                 );
                 const groupActivities = await fetchGroupActivities4Instances(
                     engine,
                     filteredInstances,
-                    organisationUnits.join(";")
+                    organisationUnits.join(";"),
                 );
                 const servedPreviousQuarter = processInstances(
                     program,
@@ -3119,7 +3119,7 @@ export const useTracker = (
                         participantIndex: 2,
                         sessionDateIndex: 3,
                     },
-                    {}
+                    {},
                 );
                 return processInstances(
                     program,
@@ -3129,12 +3129,12 @@ export const useTracker = (
                     indexCases,
                     processedUnits,
                     groupActivities,
-                    servedPreviousQuarter
+                    servedPreviousQuarter,
                 );
             }
             changeTotal(0);
             return {};
-        }
+        },
     );
 };
 
@@ -3153,11 +3153,11 @@ export const useLayering = (query: { [key: string]: any }) => {
                 cursor,
                 data: rows.map((r: any) => {
                     return fromPairs(
-                        realColumns.map((c: any, i: number) => [c.name, r[i]])
+                        realColumns.map((c: any, i: number) => [c.name, r[i]]),
                     );
                 }),
             };
-        }
+        },
     );
 };
 
@@ -3168,7 +3168,6 @@ export const useLayering2 = (query: { [key: string]: any }) => {
             const {
                 data: { columns, rows, cursor },
             } = await api.post("sql", query);
-
             if (columns) {
                 realColumns = columns;
             }
@@ -3176,11 +3175,11 @@ export const useLayering2 = (query: { [key: string]: any }) => {
                 cursor,
                 data: rows.map((r: any) => {
                     return fromPairs(
-                        realColumns.map((c: any, i: number) => [c.name, r[i]])
+                        realColumns.map((c: any, i: number) => [c.name, r[i]]),
                     );
                 }),
             };
-        }
+        },
     );
 };
 
@@ -3190,7 +3189,7 @@ export const useLayeringVSLA = (
     stage: string,
     units: string[],
     attributeColumns: string[],
-    dataElementColumns: string[]
+    dataElementColumns: string[],
 ) => {
     const key = Buffer.from(JSON.stringify(query)).toString("base64");
     return useQuery<any, Error>(
@@ -3218,11 +3217,11 @@ export const useLayeringVSLA = (
 
                 const data = rows.map((r: any) => {
                     return fromPairs(
-                        realColumns.map((c: any, i: number) => [c.name, r[i]])
+                        realColumns.map((c: any, i: number) => [c.name, r[i]]),
                     );
                 });
                 const instances = uniq(
-                    data.map((d: any) => d.trackedEntityInstance)
+                    data.map((d: any) => d.trackedEntityInstance),
                 );
 
                 const query2 = {
@@ -3245,12 +3244,12 @@ export const useLayeringVSLA = (
                                 columns1.map((c: any, i: number) => [
                                     c.name,
                                     r[i],
-                                ])
+                                ]),
                             );
                         })
                         .map(({ trackedEntityInstance, ...rest }: any) => {
                             return [trackedEntityInstance, rest];
-                        })
+                        }),
                 );
                 return {
                     cursor,
@@ -3266,7 +3265,7 @@ export const useLayeringVSLA = (
                 data: [],
                 cursor: undefined,
             };
-        }
+        },
     );
 };
 
@@ -4058,13 +4057,13 @@ export const useOVCHMIS = (districts: Option[], period: any) => {
                 return processed;
             }
             return {};
-        }
+        },
     );
 };
 
 export const useIndicatorReport = (
     districts: DistrictOption[],
-    period: any
+    period: any,
 ) => {
     const engine = useDataEngine();
     return useQuery<any, Error>(
@@ -5643,7 +5642,7 @@ export const useIndicatorReport = (
                         // "HqWXHCI6m5y",
                     ],
                     districts.map((d) => d.value),
-                    quarters
+                    quarters,
                 );
                 let processed = processRows("tar", rows);
 
@@ -5737,7 +5736,7 @@ export const useIndicatorReport = (
                                 "tarMslqTqo0kdz",
                             ],
                             quarters,
-                            processed
+                            processed,
                         ),
 
                         ...convertIndicators(
@@ -5756,7 +5755,7 @@ export const useIndicatorReport = (
                                 "tarjCwcGbjVD8G",
                             ],
                             quarters,
-                            processed
+                            processed,
                         ),
                     };
 
@@ -5780,8 +5779,8 @@ export const useIndicatorReport = (
                                         (i: number) =>
                                             processed[
                                                 `tar${accessor}${quarters[i]}`
-                                            ] || 0
-                                    )
+                                            ] || 0,
+                                    ),
                                 );
 
                             actual =
@@ -5791,8 +5790,8 @@ export const useIndicatorReport = (
                                         (i: number) =>
                                             processed[
                                                 `act${accessor}${quarters[i]}`
-                                            ] || 0
-                                    )
+                                            ] || 0,
+                                    ),
                                 );
 
                             processed = {
@@ -5818,13 +5817,13 @@ export const useIndicatorReport = (
                                     };
                                 }
                             }
-                        }
+                        },
                     );
                 });
                 return processed;
             }
             return {};
-        }
+        },
     );
 };
 
@@ -5832,7 +5831,7 @@ const computeOVCServiceTracker = async (
     engine: any,
     period: moment.Moment,
     districts: any[],
-    level: string
+    level: string,
 ) => {
     const q = period.quarter();
     const year = period.year();
@@ -5920,7 +5919,7 @@ const computeOVCServiceTracker = async (
                         {
                             terms: {
                                 [`level${level}.keyword`]: districts.map(
-                                    (d) => d.value
+                                    (d) => d.value,
                                 ),
                             },
                         },
@@ -6487,40 +6486,40 @@ const computeOVCServiceTracker = async (
             "xjo40XN55fN",
         ],
         districts.map((d) => d.value),
-        [period.format("YYYY[Q]Q")]
+        [period.format("YYYY[Q]Q")],
     );
 
     let processed: { [key: string]: any } = fromPairs(
         rows.map(([de, ou, value]: any) => [
             `${de}${ou}`,
             Number(Number(value).toFixed(0)),
-        ])
+        ]),
     );
 
     processed = {
         ...processed,
         ...fromPairs(foundRows),
         ...fromPairs(
-            childrenRows.map(([ou, total]: any) => [`child${ou}`, total])
+            childrenRows.map(([ou, total]: any) => [`child${ou}`, total]),
         ),
         ...fromPairs(
-            trackers.map(([ou, total]: any) => [`tracker${ou}`, total])
+            trackers.map(([ou, total]: any) => [`tracker${ou}`, total]),
         ),
         ...fromPairs(art.map(([ou, total]: any) => [`art${ou}`, total])),
         ...fromPairs(
-            eligible.map(([ou, total]: any) => [`eligible${ou}`, total])
+            eligible.map(([ou, total]: any) => [`eligible${ou}`, total]),
         ),
         ...fromPairs(vlt.map(([ou, total]: any) => [`vlt${ou}`, total])),
         ...fromPairs(vlr.map(([ou, total]: any) => [`vlr${ou}`, total])),
         ...fromPairs(vls.map(([ou, total]: any) => [`vls${ou}`, total])),
         ...fromPairs(
-            notServed.map(([ou, total]: any) => [`notServed${ou}`, total])
+            notServed.map(([ou, total]: any) => [`notServed${ou}`, total]),
         ),
         ...fromPairs(noVL.map(([ou, total]: any) => [`noVL${ou}`, total])),
         ...fromPairs(diff.map(([ou, total]: any) => [`diff${ou}`, total])),
         ...fromPairs(sup.map(([ou, total]: any) => [`sup${ou}`, total])),
         ...fromPairs(
-            prevention.map(([ou, total]: any) => [`PREV${ou}`, total])
+            prevention.map(([ou, total]: any) => [`PREV${ou}`, total]),
         ),
     };
     comprehensive.forEach(
@@ -6541,7 +6540,7 @@ const computeOVCServiceTracker = async (
                     servedInPreviousQuarter_17 =
                         servedInPreviousQuarter_17 +
                         servedInPreviousQuarter.value;
-                }
+                },
             );
             processed[`OVC_SERV${ou}`] = OVC_SERV.value;
             processed[`quarter${ou}`] = quarter.value;
@@ -6550,7 +6549,7 @@ const computeOVCServiceTracker = async (
             processed[`OVC_SERV_17${ou}`] = OVC_SERV_17;
             processed[`quarter_17${ou}`] = quarter_17;
             processed[`servedInPreviousQuarter_17${ou}`] = quarter.value;
-        }
+        },
     );
 
     return processed;
@@ -6558,7 +6557,7 @@ const computeOVCServiceTracker = async (
 
 export const useOVCServiceTracker = (
     districts: DistrictOption[],
-    period: any
+    period: any,
 ) => {
     const engine = useDataEngine();
 
@@ -6597,7 +6596,7 @@ export const useOVCServiceTracker = (
                         engine,
                         period,
                         districts,
-                        "3"
+                        "3",
                     );
 
                     processed = { ...processed, ...defaultSettings };
@@ -6607,14 +6606,14 @@ export const useOVCServiceTracker = (
                         engine,
                         period,
                         divisions,
-                        "4"
+                        "4",
                     );
                     processed = { ...processed, ...others };
                 }
                 return processed;
             }
             return {};
-        }
+        },
     );
 };
 
@@ -6651,9 +6650,9 @@ export const useDistricts = () => {
                         parent: pId,
                         parentName: pName,
                     };
-                }
+                },
             ),
-            "parent"
+            "parent",
         );
         setSubCounties(processedSubCounties);
         return organisationUnits;
