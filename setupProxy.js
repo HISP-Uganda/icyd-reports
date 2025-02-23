@@ -17,6 +17,7 @@ const onProxyRes = (proxyRes) => {
 };
 // proxy middleware options
 const options = {
+    // target: "http://ovcnwa.youthaliveuganda.org", // target host
     target: "https://ovcdhis2.idi.co.ug", // target host
     onProxyReq,
     onProxyRes,

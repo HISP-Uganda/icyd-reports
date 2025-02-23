@@ -145,24 +145,13 @@ const ComprehensiveLayerFilter = () => {
                     ],
                 },
             },
-            {
-                terms: {
-                    "bFnIjGJpf9t.keyword": [
-                        "1. VSLA Group",
-                        "2. Sinovuyo",
-                        "5. Stepping Stones",
-                        "6. Other (Specify)",
-                        "7. Early Childhood Development (ECD)",
-                    ],
-                },
-            },
         ];
         if (store.code) {
             must = [
                 ...must,
                 {
                     match: {
-                        ["ypDUCAS6juy.keyword"]: store.code,
+                        ["X4pNSt9UzOw.keyword"]: store.code,
                     },
                 },
             ];
@@ -170,7 +159,7 @@ const ComprehensiveLayerFilter = () => {
         let {
             data: { rows: allRows, columns, cursor: currentCursor },
         } = await api.post("sql", {
-            query: `select * from layering2`,
+            query: `select * from layering3`,
             filter: {
                 bool: {
                     must,
@@ -179,7 +168,7 @@ const ComprehensiveLayerFilter = () => {
         });
         let availableRows = allRows.map((r: any) => {
             return fromPairs(
-                columns.map((c: any, i: number) => [c.name, r[i]])
+                columns.map((c: any, i: number) => [c.name, r[i]]),
             );
         });
         if (currentCursor) {
@@ -190,9 +179,9 @@ const ComprehensiveLayerFilter = () => {
                 availableRows = availableRows.concat(
                     rows.map((r: any) => {
                         return fromPairs(
-                            columns.map((c: any, i: number) => [c.name, r[i]])
+                            columns.map((c: any, i: number) => [c.name, r[i]]),
                         );
-                    })
+                    }),
                 );
                 currentCursor = cursor;
             } while (!!currentCursor);
@@ -210,7 +199,7 @@ const ComprehensiveLayerFilter = () => {
         let ws = XLSX.utils.aoa_to_sheet([
             filteredColumns.map((c: any) => c.display),
             ...availableRows.map((r: any) =>
-                filteredColumns.map((c: any) => r[c.id])
+                filteredColumns.map((c: any) => r[c.id]),
             ),
         ]);
         wb.Sheets["Listing"] = ws;
@@ -218,7 +207,7 @@ const ComprehensiveLayerFilter = () => {
         const wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
         saveAs(
             new Blob([s2ab(wbout)], { type: "application/octet-stream" }),
-            "export.xlsx"
+            "export.xlsx",
         );
         modalOnClose();
     };
@@ -328,7 +317,7 @@ const ComprehensiveLayerFilter = () => {
                                         <Checkbox
                                             isChecked={c.selected}
                                             onChange={(
-                                                e: ChangeEvent<HTMLInputElement>
+                                                e: ChangeEvent<HTMLInputElement>,
                                             ) =>
                                                 addRemoveColumn3({
                                                     value: e.target.checked,

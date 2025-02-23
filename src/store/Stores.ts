@@ -130,6 +130,7 @@ export const $store = domain
         });
         return { ...state, columns4: processed };
     })
+
     .on(setSessions, (state, sessions) => {
         return { ...state, sessions };
     })
@@ -203,7 +204,7 @@ export const $stages = combine(
     $selectedProgram,
     (store, selectedProgram) => {
         const program = store.programs.find(
-            ({ id }: any) => id === selectedProgram
+            ({ id }: any) => id === selectedProgram,
         );
         if (program) {
             return program.programStages.map(({ id, name }: any) => {
@@ -216,7 +217,7 @@ export const $stages = combine(
         }
 
         return [];
-    }
+    },
 );
 
 export const $selectedAttributes = combine(
@@ -224,7 +225,7 @@ export const $selectedAttributes = combine(
     $selectedProgram,
     (store, selectedProgram) => {
         const program = store.programs.find(
-            ({ id }: any) => id === selectedProgram
+            ({ id }: any) => id === selectedProgram,
         );
         if (program) {
             return program.programTrackedEntityAttributes.map(
@@ -236,12 +237,12 @@ export const $selectedAttributes = combine(
                         display,
                         selected: true,
                     } as Column;
-                }
+                },
             );
         }
 
         return [];
-    }
+    },
 );
 
 export const $selectedDataElements = combine(
@@ -250,11 +251,11 @@ export const $selectedDataElements = combine(
     $selectedStage,
     (store, selectedProgram, selectedStage) => {
         const program = store.programs.find(
-            ({ id }: any) => id === selectedProgram
+            ({ id }: any) => id === selectedProgram,
         );
         if (program) {
             const stage = program.programStages.find(
-                ({ id }: any) => id === selectedStage
+                ({ id }: any) => id === selectedStage,
             );
 
             if (stage) {
@@ -267,17 +268,18 @@ export const $selectedDataElements = combine(
                             display,
                             selected: true,
                         } as Column;
-                    }
+                    },
                 );
             }
         }
 
         return [];
-    }
+    },
 );
 export const $columns4 = $store.map((state) => {
     return state.columns4.filter((c) => c.selected);
 });
+
 export const $columns3 = $store.map((state) => {
     return state.columns3.filter((c) => c.selected);
 });
@@ -289,14 +291,14 @@ export const $isChecked = $store.map((state) => {
 export const $financialQuarter = $store.map((state) => {
     const computation = calculateQuarter(
         state.period.year(),
-        1
+        1,
         // state.period.quarter()
     );
     return computation;
 });
 
 export const $withOptions = domain.createStore<Dictionary<Dictionary<string>>>(
-    {}
+    {},
 );
 
 export const withOptionsApi = createApi($withOptions, {

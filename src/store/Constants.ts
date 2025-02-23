@@ -446,6 +446,11 @@ export const columns: Column[] = [
     { selected: true, display: "Basic needs", id: "basicNeed" },
     {
         selected: true,
+        display: "Basic needs(Direct Beneficiary)",
+        id: "basicNeedsDirect",
+    },
+    {
+        selected: true,
         display: "Child Protection Legal support",
         id: "legalSupport",
     },
@@ -1525,12 +1530,7 @@ const findColor = (value: number) => {
     return "white";
 };
 
-export const columns3: Column[] = [
-    {
-        id: "X4pNSt9UzOw",
-        display: "Beneficiary ID",
-        selected: true,
-    },
+export const activitiesColumns: Column[] = [
     {
         id: "enrollmentDate",
         display: "Enrollment Date",
@@ -1984,6 +1984,24 @@ export const columns3: Column[] = [
         bg: "pink",
         display: "Completed SPM Training",
     },
+];
+
+export const columns3: Column[] = [
+    {
+        id: "X4pNSt9UzOw",
+        display: "Beneficiary ID",
+        selected: true,
+    },
+    ...activitiesColumns,
+];
+
+export const columns5: Column[] = [
+    {
+        id: "HLKc2AKR9jW",
+        display: "Beneficiary ID",
+        selected: true,
+    },
+    ...activitiesColumns,
 ];
 
 const createColumns = (

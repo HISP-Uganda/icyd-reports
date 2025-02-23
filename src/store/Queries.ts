@@ -3211,6 +3211,8 @@ export const useLayeringVSLA = (
                     query: `select * from ${String(stage).toLowerCase()}`,
                 });
 
+                console.log(rows, columns);
+
                 if (columns) {
                     realColumns = columns;
                 }

@@ -87,14 +87,14 @@ const VSLALineListTable = () => {
                             deleted: false,
                         },
                     },
-                    {
-                        range: {
-                            eventDate: {
-                                gte: dateRange[0],
-                                lte: dateRange[1],
-                            },
-                        },
-                    },
+                    // {
+                    //     range: {
+                    //         eventDate: {
+                    //             gte: dateRange[0],
+                    //             lte: dateRange[1],
+                    //         },
+                    //     },
+                    // },
                 ],
             },
         },
@@ -110,7 +110,7 @@ const VSLALineListTable = () => {
         selectedStage,
         store.selectedOrgUnits,
         attributes,
-        dataElements
+        dataElements,
     );
 
     useEffect(() => {
@@ -218,7 +218,7 @@ const VSLALineListTable = () => {
                                                     {column.display}
                                                 </Heading>
                                             </Th>
-                                        )
+                                        ),
                                     )}
                                 </Tr>
                             </Thead>
@@ -240,7 +240,7 @@ const VSLALineListTable = () => {
                                                         {realValue}
                                                     </Td>
                                                 );
-                                            }
+                                            },
                                         )}
                                     </Tr>
                                 ))}

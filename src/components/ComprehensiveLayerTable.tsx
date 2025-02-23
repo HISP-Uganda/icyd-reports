@@ -20,7 +20,7 @@ import { innerColumns, otherRows } from "../store/utils";
 const ComprehensiveLayerTable = () => {
     const store = useStore($store);
     const [query, setQuery] = useState<{ [key: string]: any }>({
-        query: `select * from layering2`,
+        query: `select * from layering3`,
         fetch_size: 100,
         filter: {
             bool: {
@@ -115,13 +115,13 @@ const ComprehensiveLayerTable = () => {
                 ...must,
                 {
                     match: {
-                        ["ypDUCAS6juy.keyword"]: store.code,
+                        ["X4pNSt9UzOw.keyword"]: store.code,
                     },
                 },
             ];
         }
         setQuery({
-            query: `select * from layering2`,
+            query: `select * from layering3`,
             fetch_size: 100,
             filter: {
                 bool: {
